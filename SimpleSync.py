@@ -14,6 +14,7 @@ import sublime
 import sublime_plugin
 import subprocess
 import threading
+import tempfile
 
 #
 # Run a process
@@ -69,6 +70,38 @@ class ScpCopier(threading.Thread):
     for line in runProcess(["scp", "-r", "-P", str(self.port) , self.local_file, remote]):
       print(line, end='')
 
+class FromScpCopier():
+  def __init__(self, host, username, local_file, remote_file, port=22):
+    self.host        = host
+    self.port        = port
+    self.username    = username
+    self.local_file  = local_file
+    self.remote_file = remote_file
+
+  def start(self):
+    remote  = self.username + "@" + self.host + ":" + self.remote_file
+    temp_file = tempfile.NamedTemporaryFile()
+
+    print("SimpleSync: ", remote, " -> ", self.local_file, " via temp file ", temp_file.name)
+
+    for line in runProcess(["scp", "-r", "-P", str(self.port), remote, temp_file.name]):
+      print(line, end='')
+
+    print("Compare ", temp_file.name, " to ", self.local_file)
+
+    compare_diff = False
+    for line in runProcess(["cmp", temp_file.name, self.local_file]):
+      print(line, end='')
+      if line:
+        compare_diff = True
+
+    if (compare_diff):
+      if (sublime.ok_cancel_dialog("Local file is different from remote! Replace local file?", "Yes please")):
+        for line in runProcess(['cp', temp_file.name, self.local_file]):
+          print(line, end='')
+
+    temp_file.close()
+
 #
 # LocalCopier does local copying using threading to avoid UI blocking
 #
@@ -88,6 +121,23 @@ class LocalCopier(threading.Thread):
 # Subclass sublime_plugin.EventListener
 #
 class SimpleSync(sublime_plugin.EventListener):
+  def on_load(self, view):
+    settings     = sublime.load_settings("SimpleSync.sublime-settings")
+    sync_on_open = settings.get("sync_on_open", True)
+    if not sync_on_open:
+      return
+
+    local_file = view.file_name()
+    syncItems  = getSyncItem(local_file)
+
+    if (len(syncItems) > 0):
+      for item in syncItems:
+        remote_file = local_file.replace(item["local"], item["remote"])
+
+        if (item["type"] == "ssh"):
+          FromScpCopier(item["host"], item["username"], local_file, remote_file, port=item["port"]).start()
+
+
   def on_post_save(self, view):
     local_file = view.file_name()
     syncItems  = getSyncItem(local_file)
