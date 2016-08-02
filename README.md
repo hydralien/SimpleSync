@@ -58,6 +58,7 @@ Files are saved to remote server automatically when you save them locally. In ca
 
 Also when you open a file, it checks its remote counterpart for if it's different (if, say, repository was updated) and asks you to refresh local copy if that's the case. You can switchi this change off by specifying "sync_on_open" : false in user config, like e.g.
 
+``` javascript
 {
   "sync_on_open" : false,
   "sync": [{
