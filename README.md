@@ -56,6 +56,21 @@ Sample settings:
 
 Files are saved to remote server automatically when you save them locally. In case of "local" syncing, they are copied to "remote" folder which is on the same machine.
 
+Also when you open a file, it checks its remote counterpart for if it's different (if, say, repository was updated) and asks you to refresh local copy if that's the case. You can switchi this change off by specifying "sync_on_open" : false in user config, like e.g.
+
+{
+  "sync_on_open" : false,
+  "sync": [{
+    "type"     : "ssh",
+    "host"     : "tnhu-ld",
+    "port"     : "22",
+    "username" : "tnhu",
+    "local"    : "/Users/tnhu/workspace/trunk",
+    "remote"   : "/home/tnhu/workspace/trunk"
+  }]
+}
+```
+
 ## Contributors
 
 * [tnhu](https://github.com/tnhu)

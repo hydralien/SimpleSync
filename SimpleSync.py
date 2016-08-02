@@ -22,14 +22,19 @@ import tempfile
 #
 def runProcess(cmd):
   p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
+  
+  retcode = None
   while (True):
     retcode = p.poll()             #returns None while subprocess is running
     line    = p.stdout.readline()
-    yield line.decode('utf-8')
+    print(line.decode('utf-8'), end='')
 
     if (retcode is not None):
       break
+
+  if not retcode: # result is OK if return value is 0, we're reversing it here for readbility
+    return True
+  return False
 
 #
 # Get sync item(s) for a file
@@ -67,8 +72,11 @@ class ScpCopier(threading.Thread):
 
     print("SimpleSync: ", self.local_file, " -> ", remote)
 
-    for line in runProcess(["scp", "-r", "-P", str(self.port) , self.local_file, remote]):
-      print(line, end='')
+    if not runProcess(["scp", "-r", "-P", str(self.port) , self.local_file, remote]):
+      sublime.status_message("Copying to {} on {} failed, see console for details".format(self.remote_file, self.host))
+    else:
+      sublime.status_message("Saved {} on {}!".format(self.remote_file, self.host))
+      
 
 class FromScpCopier():
   def __init__(self, host, username, local_file, remote_file, port=22):
@@ -84,21 +92,20 @@ class FromScpCopier():
 
     print("SimpleSync: ", remote, " -> ", self.local_file, " via temp file ", temp_file.name)
 
-    for line in runProcess(["scp", "-r", "-P", str(self.port), remote, temp_file.name]):
-      print(line, end='')
+    if not runProcess(["scp", "-r", "-P", str(self.port), remote, temp_file.name]):
+      sublime.status_message("Reading {} on {} failed (but maybe it just does not exist yet), see console for details".format(self.remote_file, self.host))
+      return
 
     print("Compare ", temp_file.name, " to ", self.local_file)
 
-    compare_diff = False
-    for line in runProcess(["cmp", temp_file.name, self.local_file]):
-      print(line, end='')
-      if line:
-        compare_diff = True
+    no_diff = runProcess(["cmp", temp_file.name, self.local_file])
 
-    if (compare_diff):
+    if not no_diff:
       if (sublime.ok_cancel_dialog("Local file is different from remote! Replace local file?", "Yes please")):
-        for line in runProcess(['cp', temp_file.name, self.local_file]):
-          print(line, end='')
+        if not runProcess(['cp', temp_file.name, self.local_file]):
+          sublime.status_message("Cannot update local file, check console for details")
+        else:
+          sublime.status_message("Local file updated")
 
     temp_file.close()
 
@@ -114,8 +121,10 @@ class LocalCopier(threading.Thread):
   def run(self):
     print("SimpleSync: ", self.local_file, " -> ", self.remote_file)
 
-    for line in runProcess(['cp', self.local_file, self.remote_file]):
-      print(line, end='')
+    if not runProcess(['cp', self.local_file, self.remote_file]):
+      sublime.status_message("Cannot copy file locally, check console for details")
+    else:
+      sublime.status_message("File saved to local mirror")
 
 #
 # Subclass sublime_plugin.EventListener
