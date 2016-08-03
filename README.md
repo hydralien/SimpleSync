@@ -1,3 +1,5 @@
+*Previously maintained by [Tan Nhu](https://github.com/tnhu) at [https://github.com/tnhu/SimpleSync](https://github.com/tnhu/SimpleSync)*
+
 # SimpleSync
 
 Simple Sublime Text 2/3 plugin for SSH and local syncing.
@@ -76,6 +78,7 @@ Also when you open a file, it checks its remote counterpart for if it's differen
 
 * [tnhu](https://github.com/tnhu)
 * [gfreezy](https://github.com/gfreezy)
+* [hydralien](https://github.com/hydralien/SimpleSync)
 
 ## License
 
