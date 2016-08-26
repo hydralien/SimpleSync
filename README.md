@@ -11,7 +11,7 @@ Simple Sublime Text 2/3 plugin for SSH and local syncing.
 
 ## Installation
 
-### Using ST2/3 Package Control ([https://packagecontrol.io/installation])
+### Using ST2/3 [Package Control](https://packagecontrol.io/installation)
 
 Search for SimpleSync in ST2/3 Package Control and install it.
 
