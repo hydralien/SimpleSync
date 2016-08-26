@@ -22,14 +22,14 @@ Search for SimpleSync in ST2/3 Package Control and install it.
 Clone this project into your ST2 Packages folder, for example:
 
 ``` bash
-cd "~/Library/Application Support/Sublime Text 2/Packages"
+cd ~/"Library/Application Support/Sublime Text 2/Packages"
 git clone https://github.com/hydralien/SimpleSync.git
 ```
 
 * Sublime Text 3
 
 ``` bash
-cd "~/Library/Application Support/Sublime Text 3/Packages"
+cd ~/"Library/Application Support/Sublime Text 3/Packages"
 git clone https://github.com/hydralien/SimpleSync.git
 ```
 
