@@ -11,33 +11,34 @@ Simple Sublime Text 2/3 plugin for SSH and local syncing.
 
 ## Installation
 
+### Using ST2/3 Package Control ([https://packagecontrol.io/installation])
+
+Search for SimpleSync in ST2/3 Package Control and install it.
+
+
 ### Manually
 
 * Sublime Text 2
 Clone this project into your ST2 Packages folder, for example:
 
 ``` bash
-cd "/Users/tnhu/Library/Application Support/Sublime Text 2/Packages"
-git clone https://github.com/tnhu/SimpleSync.git
+cd "~/Library/Application Support/Sublime Text 2/Packages"
+git clone https://github.com/hydralien/SimpleSync.git
 ```
 
 * Sublime Text 3
 
 ``` bash
-cd "/Users/tnhu/Library/Application Support/Sublime Text 3/Packages"
-git clone https://github.com/tnhu/SimpleSync.git
+cd "~/Library/Application Support/Sublime Text 3/Packages"
+git clone https://github.com/hydralien/SimpleSync.git
 ```
-
-### Using ST2/3 Package Control
-
-Search for SimpleSync in ST2/3 Package Control and install it.
 
 ## Settings
 
 When you finish installing SimpleSync, its settings can be found in Preferences > Package Settings > SimpleSync > Settings - Default.
 And you should put your custom settings in Preferences > Package Settings > SimpleSync > Settings - User.
 
-Sample settings:
+Sample settings (remember to replace "username" with yours and adjust paths if needed):
 
 ``` javascript
 {
@@ -46,12 +47,12 @@ Sample settings:
     "host"     : "tnhu-ld",
     "port"     : "22",
     "username" : "tnhu",
-    "local"    : "/Users/tnhu/workspace/trunk",
-    "remote"   : "/home/tnhu/workspace/trunk"
+    "local"    : "/Users/username/project",
+    "remote"   : "/home/tnhu/project"
   }, {
     "type"     : "local",
-    "local"    : "/Users/tnhu/Library/Application Support/Sublime Text 2/Packages/SimpleSync",
-    "remote"   : "/Users/tnhu/Dropbox/projects/SimpleSync"
+    "local"    : "/Users/username/Library/Application Support/Sublime Text 2/Packages/SimpleSync",
+    "remote"   : "/Users/username/Dropbox/projects/SimpleSync"
   }]
 }
 ```
@@ -68,8 +69,8 @@ Also when you open a file, it checks its remote counterpart for if it's differen
     "host"     : "tnhu-ld",
     "port"     : "22",
     "username" : "tnhu",
-    "local"    : "/Users/tnhu/workspace/trunk",
-    "remote"   : "/home/tnhu/workspace/trunk"
+    "local"    : "/Users/username/project",
+    "remote"   : "/home/username/project"
   }]
 }
 ```
